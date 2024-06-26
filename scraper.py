@@ -21,14 +21,14 @@ publication_rows = WebDriverWait(driver, max_wait).until(
 
 # Create a CSV file to capture Title, Link_URL, Pub_Type, and DOI_URL
 publications_csv =  open('publications.csv', 'w', newline='', encoding='utf-8')
-csv_writer = csv.writer(publications_csv, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+csv_writer = csv.writer(publications_csv, delimiter=',')
 csv_writer.writerow(['Title', 'Link_URL', 'Pub_Type', 'DOI_URL'])
 
 for index, publication_row in enumerate(publication_rows):
     anchor_element = publication_row.find_element(By.TAG_NAME, 'a')
     publication = {}
 
-    # Get the publication title
+    # Get the publication title 
     publication['Title'] = anchor_element.text
 
     # Open the publication in a new tab and save the link URL
@@ -48,7 +48,7 @@ for index, publication_row in enumerate(publication_rows):
         DOI_URL_element = driver.find_element(By.XPATH, '//a[contains(text(), "View DOI Listing")]')
         DOI_URL = driver.execute_script('return arguments[0].href', DOI_URL_element)
     except NoSuchElementException:
-        DOI_URL = 'null'
+        DOI_URL = None
     publication['DOI_URL'] = DOI_URL
     
     # Write this publication to publications.csv
